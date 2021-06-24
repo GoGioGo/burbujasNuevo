@@ -1,0 +1,57 @@
+[{
+    "id": 1,
+    "country": "United States",
+    "poblationWeighted": 900000,
+    "poblationMedian": 670000,
+    "percentage": 23
+},
+{
+    "id": 2,
+    "country": "Indonesia",
+    "poblationWeighted": 600000,
+    "poblationMedian": 350000,
+    "percentage": 32
+},
+{
+    "id": 3,
+    "country": "Tanzania",
+    "poblationWeighted": 200000,
+    "poblationMedian": 850000,
+    "percentage": 19
+},
+{
+    "id": 4,
+    "country": "SouthAfrica",
+    "poblationWeighted": 520000,
+    "poblationMedian": 390000,
+    "percentage": 44
+},
+{
+    "id": 5,
+    "country": "United States",
+    "poblationWeighted": 560000,
+    "poblationMedian": 450000,
+    "percentage": 65
+},
+{
+    "id": 6,
+    "country": "Indonesia",
+    "poblationWeighted": 740000,
+    "poblationMedian": 330000,
+    "percentage": 71
+},
+{
+    "id": 7,
+    "country": "Tanzania",
+    "poblationWeighted": 720000,
+    "poblationMedian": 320000,
+    "percentage": 82
+},
+{
+    "id": 8,
+    "country": "SouthAfrica",
+    "poblationWeighted": 780000,
+    "poblationMedian": 220000,
+    "percentage": 90
+}
+]

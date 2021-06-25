@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
-import { generateNewJson, graflinea, transitionCircle, text, findBigEstate, 
-    findBigEstateM, setText, findJson, printLine } from '../functions/Functions'
+import {
+    generateNewJson, graflinea, transitionCircle, text, findBigEstate,
+    findBigEstateM, setText, findJson, printLine
+} from '../functions/Functions'
 import fully1 from '../jsons/fullyVaccinated.json'
 import fully2 from '../jsons/fullyVaccinated2.json'
 import fully3 from '../jsons/fullyVaccinated3.json'
@@ -18,7 +20,20 @@ import { Modal } from 'antd'
 import 'antd/dist/antd.css'
 import { propCircle, propLine, propText, propC } from '../functions/Interfaces'
 
+interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
 export default function Index() {
+    const size: Size = {
+        width: 500,
+        height: 200
+    }
+
+    let margin = { top: 20, right: 20, bottom: 20, left: 20 }
+        , width = size.width! - margin.left - margin.right
+        , height = size.height! - margin.top - margin.bottom;
+
     let initialDataJson: propC = {
         id: 0,
         country: '',
@@ -59,8 +74,71 @@ export default function Index() {
     const [ge, setge] = useState<propC>(initialDataJson)//variable de un componente json para mostrar el modal con sus datos
     //modal
     const [modal, setmodal] = useState(false)
+
     const abrirModal = (x: propC) => {
-        let cm2: propC = findJson(x.id, fullyV2)
+
+        let ay = ['0%', '20%', '40%', '60%', '80%', '100%']
+        let y = [0, 20, 40, 60, 80, 100]
+        var n = 10;
+
+        var xScale = d3.scaleLinear()
+            .domain([0, n - 1])
+            .range([0, width]);
+
+        var yScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([height, 0]);
+
+        var dataset = d3.range(n)
+            .map(function (d) {
+                return { "y": d3.randomUniform(1)() }
+            })
+
+        var svg = d3.select("#graphic")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale));
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(yScale));
+
+        var line = d3.line()
+            .x(function (d, i) { return xScale(i); })
+            .y(function (d: any) { return yScale(d.y); })
+
+        svg.append("path")
+            .datum(dataset)
+            .attr("class", "line")
+            .join(
+                enter => enter.append('path'),
+                update => update,
+                exit => exit.remove()
+            )
+            .attr("d", function (d: any) { return line(d) })
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+
+        svg.selectAll(".dot")
+            .data(dataset)
+            .enter().append("circle")
+            .attr("class", "dot")
+            .attr("cx", function (d, i) { return xScale(i) })
+            .attr("cy", function (d) { return yScale(d.y) })
+            .attr("r", 5)
+        text({ x: 10, y: 12, text: 'NERVOUSNESS BY SURVEY RESPONDENTS', size: '14px' }, cabezaModal)
+        setText(tit, footer, 130, 30, '14px', true)
+
+        setmodal(true)
+
+        /* let cm2: propC = findJson(x.id, fullyV2)
         let cm3: propC = findJson(x.id, fullyV3)
         let cn1: propC = findJson(x.id, notV1)
         let cn2: propC = findJson(x.id, notV2)
@@ -82,7 +160,7 @@ export default function Index() {
         setText(abs, absisas, 110, 15, '12px', true)
         setText(tit, footer, 130, 30, '14px', true)
         setge(x)
-        setmodal(true)
+        setmodal(true) */
     }
     const cerrarModal = () => {
         setmodal(false)
@@ -102,7 +180,7 @@ export default function Index() {
                 transitionCircle(newJson, notVaccinated, 'n')
             });
     }
-     function printCircleP(x: propC[], svgRef: any, color: string, c: string) {
+    function printCircleP(x: propC[], svgRef: any, color: string, c: string) {
         let svg = d3.select(svgRef.current)
         let circle = svg.selectAll('circle')
             .data(x)
@@ -170,12 +248,14 @@ export default function Index() {
                 <div style={{ width: '62%', height: '310px', float: 'left' }}>
                     <svg ref={cabezaModal} width='100%' height='25px' style={{ color: 'red', width: '100%', height: '20px', display: 'block' }} />
                     <svg ref={percentageModal} width='17%' height='200px' style={{ float: 'left' }} />
-                    <svg id='graphic' width='62%' height='200px' style={{ float: 'left' }} />
+                    <svg id='graphic' width='300px' height='200px' style={{ float: 'left' }} />
                     <svg ref={absisas} width='100%' height='20px' style={{ display: 'block', clear: 'both' }} />
                     <svg ref={footer} width='100%' height='35px' style={{ display: 'block' }} />
                 </div>
-
-                <svg width='30%' height='310px' style={{ float: 'left', backgroundColor: 'blue' }} />
+                <div  style={{ float: 'left', width:'30%',  height:'310px'}} > <br/><br/>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laboriosam odio, sequi fugit vel tempore voluptatum,
+                    nulla iure minus enim quae maiores nostrum impedit animi
+                    neque assumenda ad, facere distinctio eius!</div>
             </Modal>
         </div>
     </>

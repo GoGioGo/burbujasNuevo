@@ -4,9 +4,7 @@ import Lines from '../components/Lines'
 
 export default function Home() {
     return (<>
-        <Circles />
         <Lines />
-        <Grafica />
     </>
     )
 }

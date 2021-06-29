@@ -58,18 +58,16 @@ export default function Index() {
     const notVaccinated = useRef<SVGSVGElement | null>(null)
     const titulos = useRef<SVGSVGElement | null>(null)
     const pie = useRef<SVGSVGElement | null>(null)
-    const cabezaModal = useRef<SVGSVGElement | null>(null)
+/*     const cabezaModal = useRef<SVGSVGElement | null>(null)
     const percentageModal = useRef<SVGSVGElement | null>(null)
     const absisas = useRef<SVGSVGElement | null>(null)
-    const footer = useRef<SVGSVGElement | null>(null)
+    const footer = useRef<SVGSVGElement | null>(null) */
     //array con textos para los marcos
     let per = ['0%', '20%', '40%', '60%', '80%', '100%']
     let abs = ['2.0', '4.5', '7.0', '9.5']
     let tit = ['Fully Vaccinated', 'Partially Vaccinated', 'Not Vaccinated']
 
     const [ge, setge] = useState<propC>(initialDataJson)//variable de un componente json para mostrar el modal con sus datos
-    //modal
-    const [modal, setmodal] = useState(false)
 
     const abrirModal = (x: propC) => {
 
@@ -79,9 +77,6 @@ export default function Index() {
         graficaRectas(size, 3, 'blue')
 
 
-        text({ x: 10, y: 12, text: 'NERVOUSNESS BY SURVEY RESPONDENTS', size: '14px' }, cabezaModal)
-        setText(tit, footer, 130, 30, '14px', true)
-        setmodal(true)
 
         /* let cm2: propC = findJson(x.id, fullyV2)
         let cm3: propC = findJson(x.id, fullyV3)
@@ -107,10 +102,7 @@ export default function Index() {
         setge(x)
         setmodal(true) */
     }
-    const cerrarModal = () => {
-        setmodal(false)
-    }
-
+   
     let color = '#9ca8ab'
     function click() {
         d3.select("#btnCircles")
@@ -179,29 +171,5 @@ export default function Index() {
             <svg ref={pie} width='58%' height='25px' style={{ backgroundColor: '#E6E6FA', marginLeft: '20%', marginRight: '10px', marginTop: '6px' }}></svg>
         </div>
 
-        <div style={{ width: '100%', height: '100%' }}>
-            <Modal
-                title='HAVE RESPONDENTS IN THE UNITED KINGDOM RECEIVED THE COVID-19 VACCINE?'
-                visible={modal}
-                onCancel={cerrarModal}
-                onOk={() => { alert('hola') }}
-                className='modal'
-                width='80%'
-                min-height='700px'
-                style={{ height: '400px', minHeight: '400px' }}
-            >
-                <div style={{ width: '62%', height: '310px', float: 'left' }}>
-                    <svg ref={cabezaModal} width='100%' height='25px' style={{ color: 'red', width: '100%', height: '20px', display: 'block' }} />
-                    <svg ref={percentageModal} width='17%' height='200px' style={{ float: 'left' }} />
-                    <svg id='graphic' width='300px' height='200px' style={{ float: 'left' }} />
-                    <svg ref={absisas} width='100%' height='20px' style={{ display: 'block', clear: 'both' }} />
-                    <svg ref={footer} width='100%' height='35px' style={{ display: 'block' }} />
-                </div>
-                <div  style={{ float: 'left', width:'30%',  height:'310px'}} > <br/><br/>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Laboriosam odio, sequi fugit vel tempore voluptatum,
-                    nulla iure minus enim quae maiores nostrum impedit animi
-                    neque assumenda ad, facere distinctio eius!</div>
-            </Modal>
-        </div>
     </>
 }

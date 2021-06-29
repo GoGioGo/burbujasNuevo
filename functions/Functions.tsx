@@ -21,17 +21,7 @@ export function textGra(svgRef: any, x: number, y: string, grados: number) {
     h.text = y
     text(h, svgRef)
 }
-//grafica texto en cuanquier lugar
-export function text(x: propText, svgRef: any) {
-    d3.select(svgRef.current)
-        .append('text')
-        .attr('font-size', `${x.size}`)
-        .attr('font-weight', 'bold')
-        .style('opacity', '1')
-        .attr('x', x.x)
-        .attr('y', x.y)
-        .text(`${x.text}`)
-}
+
 export function printLine(x: propLine, y: string, z: string) {
     d3.select(`#${y}`)
         .append('line')
@@ -96,6 +86,19 @@ export function generateNewJson(x: propC[]) {
         e.poblationWeighted = Math.ceil(Math.random() * 10) * 100000
         e.poblationMedian = Math.ceil(Math.random() * 10) * 100000
     })
+}
+//grafica texto en cuanquier lugar
+export function text(x: propText, svgRef: any) {
+    d3.select(svgRef.current).selectAll('text').exit().remove()
+
+    d3.select(svgRef.current)
+        .append('text')
+        .attr('font-size', `${x.size}`)
+        .attr('font-weight', 'bold')
+        .style('opacity', '1')
+        .attr('x', x.x)
+        .attr('y', x.y)
+        .text(`${x.text}`)
 }
 
 export function setText(data: string[], svgRef: any, x: number, y: number, size: string, orientacionText: boolean) {

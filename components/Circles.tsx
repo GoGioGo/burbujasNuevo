@@ -3,6 +3,7 @@ import {
     generateNewJson, graflinea, transitionCircle, text, findBigEstate,
     findBigEstateM, setText, findJson, printLine
 } from '../functions/Functions'
+import {graficaRectas} from '../functions/functions2'
 import fully1 from '../jsons/fullyVaccinated.json'
 import fully2 from '../jsons/fullyVaccinated2.json'
 import fully3 from '../jsons/fullyVaccinated3.json'
@@ -18,21 +19,16 @@ import not3 from '../jsons/notVaccinated3.json'
 import * as d3 from 'd3'
 import { Modal } from 'antd'
 import 'antd/dist/antd.css'
-import { propCircle, propLine, propText, propC } from '../functions/Interfaces'
+import { Size, propCircle, propLine, propText, propC } from '../functions/Interfaces'
 
-interface Size {
-    width: number | undefined;
-    height: number | undefined;
-}
+
 export default function Index() {
     const size: Size = {
         width: 500,
         height: 200
     }
 
-    let margin = { top: 20, right: 20, bottom: 20, left: 20 }
-        , width = size.width! - margin.left - margin.right
-        , height = size.height! - margin.top - margin.bottom;
+    
 
     let initialDataJson: propC = {
         id: 0,
@@ -77,65 +73,14 @@ export default function Index() {
 
     const abrirModal = (x: propC) => {
 
-        let ay = ['0%', '20%', '40%', '60%', '80%', '100%']
-        let y = [0, 20, 40, 60, 80, 100]
-        var n = 10;
 
-        var xScale = d3.scaleLinear()
-            .domain([0, n - 1])
-            .range([0, width]);
+        graficaRectas(size, 1, 'red')
+        graficaRectas(size, 2, 'yellow')
+        graficaRectas(size, 3, 'blue')
 
-        var yScale = d3.scaleLinear()
-            .domain([0, 1])
-            .range([height, 0]);
 
-        var dataset = d3.range(n)
-            .map(function (d) {
-                return { "y": d3.randomUniform(1)() }
-            })
-
-        var svg = d3.select("#graphic")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(xScale));
-
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(d3.axisLeft(yScale));
-
-        var line = d3.line()
-            .x(function (d, i) { return xScale(i); })
-            .y(function (d: any) { return yScale(d.y); })
-
-        svg.append("path")
-            .datum(dataset)
-            .attr("class", "line")
-            .join(
-                enter => enter.append('path'),
-                update => update,
-                exit => exit.remove()
-            )
-            .attr("d", function (d: any) { return line(d) })
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-
-        svg.selectAll(".dot")
-            .data(dataset)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", function (d, i) { return xScale(i) })
-            .attr("cy", function (d) { return yScale(d.y) })
-            .attr("r", 5)
         text({ x: 10, y: 12, text: 'NERVOUSNESS BY SURVEY RESPONDENTS', size: '14px' }, cabezaModal)
         setText(tit, footer, 130, 30, '14px', true)
-
         setmodal(true)
 
         /* let cm2: propC = findJson(x.id, fullyV2)

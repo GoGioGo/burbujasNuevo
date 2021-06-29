@@ -1,3 +1,11 @@
+export interface chart {
+    array:number[],
+    name:string
+}
+export interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
 export interface propCircle  {
     cx : number,
     cy: number,

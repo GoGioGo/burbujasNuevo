@@ -3,9 +3,12 @@ import { Circle, drawCircle, generadorArrayDeterminado, generaPuntosX, generaPun
 import { textGra } from '../functions/Functions'
 import * as d3 from 'd3'
 import { Checkbox } from 'antd';
-
+import { chart } from '../functions/Interfaces'
 const CheckboxGroup = Checkbox.Group;
 export default function Grafica() {
+
+
+    const [data, setData] = useState<chart[] | null>(null)
 
     let options = ['Not Elegible', 'Unable to provide Require', 'Technical dificultes with web site',
         'No vaccine apointments', 'Apointment times did', 'Limit internet', 'Need childcare', 'Difficulty traveling', 'Difficult leave']
@@ -45,49 +48,167 @@ export default function Grafica() {
             })
     }
 
-    function genera() {
-        d3.select('#btnGenera')
-            .on('click', () => {
-                let m = 360 / checkedList.length
-                console.log(m)
-                checkedList.map((e: string) => {
-                    switch (e) {
-                        case 'Not Elegible':
-                            let NotEle = generadorArrayDeterminado(7)
-                            break;
-                        case 'Unable to provide Require':
-                            let UnaPro = generadorArrayDeterminado(7);
-                            break;
-                        case 'Technical dificultes with web site':
-                            let TechDifi = generadorArrayDeterminado(7);
-                            break;
-                        case 'No vaccine apointments':
-                            let NoVacc = generadorArrayDeterminado(7)
-                            break;
-                        case 'Apointment times did':
-                            let Apoin = generadorArrayDeterminado(7)
-                            break;
-                        case 'Limit internet':
-                            let Limit = generadorArrayDeterminado(7)
-                            break;
-                        case 'Need childcare':
-                            let Need = generadorArrayDeterminado(7)
-                            break;
-                        case 'Difficulty traveling':
-                            let Dif = generadorArrayDeterminado(7)
-
-                            break;
-                        case 'Difficult leave':
-                            let DifL = generadorArrayDeterminado(7)
-                            break;
-                    }
-
-                })
-                printChart3(svgRef4, checkedList.length, 360/checkedList.length,  UnaPro, TechDifi, NoVacc, Apoin, Limit, NotEle, Need, Dif, DifL)
-
-
-            })
+    function genera2() {
+        interface b {
+            id: number[],
+            name: string
+        }
+        let a: b[] = []
+        a[0] = { id: generadorArrayDeterminado(7), name: 'gio' }
+        console.log(a)
+        a[1] = { id: generadorArrayDeterminado(7), name: 'kio' }
+        console.log(a)
     }
+
+    function genera() {
+        /* let b: chart[] = []
+        for (let k = 0; k < checkedList.length; k++) {
+            if (checkedList[k] == 'Not Elegible') {
+                b[k] = { array: generadorArrayDeterminado(7), name: 'Not Elegible' }
+            }
+            else {
+                if (checkedList[k] == 'Unable to provide Require') {
+                    b[k] = { array: generadorArrayDeterminado(7), name: 'Unable to provide Require' }
+                }
+                else {
+                    if (checkedList[k] == 'Technical dificultes with web site') {
+                        b[k] = { array: generadorArrayDeterminado(7), name: 'Technical dificultes with web site' }
+                    }
+                    else {
+                        if (checkedList[k] == 'No vaccine apointments') {
+                            b[k] = { array: generadorArrayDeterminado(7), name: 'No vaccine apointments' }
+                        }
+                        else {
+                            if (checkedList[k] == 'Apointment times did') {
+                                b[k] = { array: generadorArrayDeterminado(7), name: 'Apointment times did' }
+                            }
+                            else {
+                                if (checkedList[k] == 'Limit internet') {
+                                    b[k] = { array: generadorArrayDeterminado(7), name: 'Limit internet' }
+                                }
+                                else {
+                                    if (checkedList[k] == 'Need childcare') {
+                                        b[k] = { array: generadorArrayDeterminado(7), name: 'Need childcare' }
+                                    }
+                                    else {
+                                        if (checkedList[k] == 'Difficulty traveling') {
+                                            b[k] = { array: generadorArrayDeterminado(7), name: 'Difficulty traveling' }
+                                        }
+                                        else {
+                                            if (checkedList[k] == 'Difficult leave') {
+                                                b[k] = { array: generadorArrayDeterminado(7), name: 'Difficult leave' }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        printChart3(svgRef4, b) */
+
+
+        /* for (let j = 0; j < checkedList.length; j++) {
+            switch (checkedList[j]) {
+                case 'Not Elegible':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Not Elegible'
+                    break;
+                case 'Unable to provide Require':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Unable to provide Require'
+                    break;
+                case 'Technical dificultes with web site':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Technical dificultes with web site'
+                    break;
+                case 'No vaccine apointments':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'No vaccine apointments'
+                    break;
+                case 'Apointment times did':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Apointment times did'
+                    break;
+                case 'Limit internet':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Limit internet'
+                    break;
+                case 'Need childcare':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Need childcare'
+                    break;
+                case 'Difficulty traveling':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Difficulty traveling'
+                    break;
+                case 'Difficult leave':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Difficult leave'
+                    break;
+            }
+            b[j] = a
+            console.log(b[j])
+        }
+        console.log(b)
+ */
+        /* checkedList.map((e: string, i) => {
+            switch (e) {
+                case 'Not Elegible':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Not Elegible'
+                    break;
+                case 'Unable to provide Require':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Unable to provide Require'
+                    break;
+                case 'Technical dificultes with web site':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Technical dificultes with web site'
+                    break;
+                case 'No vaccine apointments':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'No vaccine apointments'
+                    break;
+                case 'Apointment times did':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Apointment times did'
+                    break;
+                case 'Limit internet':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Limit internet'
+                    break;
+                case 'Need childcare':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Need childcare'
+                    break;
+                case 'Difficulty traveling':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Difficulty traveling'
+                    break;
+                case 'Difficult leave':
+                    a.array = generadorArrayDeterminado(7)
+                    a.name = 'Difficult leave'
+                    break;
+            }
+            console.log(a)
+            b[i]=a
+            
+        }) */
+        /* for (let i = 0; i < b.length; i++)
+            console.log(b[i]) */
+
+
+        //printChart3(svgRef4, checkedList.length, 360 / checkedList.length, NotEleG, UnaProG, TechDifiG, NoVaccG, ApoinG, LimitG, NeedG, DifG, DifLG)
+
+    }
+
+    function transition2(){
+
+    }
+
     useEffect(() => {
         //Generando circulos
 
@@ -148,9 +269,10 @@ export default function Grafica() {
         printChart(UnaPro, TechDifi, NoVacc, Apoin, Limit, NotEle, Need, Dif, DifL, 40, 80, 120, 160, 200, 240, 280, 320, 360, svgRef2)
 
         //printChart3(svgRef4, checkedList.length, 360/checkedList.length,  UnaPro, TechDifi, NoVacc, Apoin, Limit, NotEle, Need, Dif, DifL)
-        
+
 
         Circle(svgRef2, [100, 150, 200, 250, 300], 'giokio')
+
 
         d3.selectAll('path')
             .on('mouseover', function (d, i) {
@@ -160,6 +282,7 @@ export default function Grafica() {
                 d3.select(this).attr('opacity', '0.3')
             })
     }, [])
+
     return <div >
 
         <button onClick={transition} id='btnChart'>transicion</button>
@@ -169,7 +292,8 @@ export default function Grafica() {
         </svg>
         <div>
             <CheckboxGroup options={options} value={checkedList} onChange={onChange} />
-            <button onClick={genera} id='btnGenera'>generar</button>
+            <button onClick={() => genera()} id='btnGenera'>generar</button>
+            <button onClick={() => transition2()} id='transition2'>Transision</button>
         </div>
         <svg width='800' height='800'>
             <g ref={svgRef4} transform='translate(400, 400)'></g>

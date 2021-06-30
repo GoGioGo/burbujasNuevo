@@ -22,8 +22,13 @@ export default function circlecolor() {
     const [politicians, setPoliticians] = useState<data[] | null>([])
     const [friends, setFriends] = useState<data[] | null>([])
 
+    let color = ['red', 'pink', 'yelllow', 'blue', 'green', 'orange', 'purple']
+    let variables = ['Local Healt woeckecs', 'Scientists and helth', 'CDC WHO', 'Journalists', 'Religiuos Leaders', 'Politicians', 'Friends and Family']
+
     const ref = useRef<SVGSVGElement | null>(null)
     const ref2 = useRef<SVGSVGElement | null>(null)
+    const ref3 = useRef<SVGSVGElement | null>(null)
+
     const size: Size = {
         width: 800,
         height: 600
@@ -32,49 +37,60 @@ export default function circlecolor() {
         , width = size.width! - margin.left - margin.right
         , height = size.height! - margin.top - margin.bottom;
 
-    function circles(date:string){
-        graphicCircles(date, scientists!, 'uno') 
-        graphicCircles(date, friends!, 'dos') 
+    function generateCircles(date: string) {
+        erase(scientists!, 1)
+        erase(friends!, 2)
+        erase(localH!, 3)
+        erase(cdc!, 4)
+        erase(journalists!, 5)
+        erase(religious!, 6)
+        erase(politicians!, 7)
 
+        graphicCircles(date, scientists!, 1)
+        graphicCircles(date, friends!, 2)
+        graphicCircles(date, localH!, 3)
+        graphicCircles(date, cdc!, 4)
+        graphicCircles(date, journalists!, 5)
+        graphicCircles(date, religious!, 6)
+        graphicCircles(date, politicians!, 7)
     }
 
-    function graphicCircles(date: string, x:data[], id:string) {
-        
+    function graphicCircles(date: string, x: data[], id: number) {
+
         let circle = d3.select(ref.current)
             .selectAll('circle')
-            .filter('#id'+id)
-            .data(x!)
+            .filter('#id' + id)
+            .data(x.filter((e: data) => {
+                if (e.month === date)
+                    return e
+            }))
             .enter()
             .append('circle')
             .attr('cx', function (d: any) {
-                if (date == d.month) {
-                    console.log(date, d.name)
-                    return d.trust
-                } else return -100
+                return d.trust
             })
             .attr('cy', function (d: any) {
-                if (date == d.month) {
-                    return -d.exposure
-                } else return 100
+                return -d.exposure
             })
             .attr('r', 0)
-            .attr('fill', 'red')
+            .attr('fill', function (d) { return color[id] })
             .attr('stroke', 'black')
-            .attr('id', function (d: any) { return 'id'+ id+ d.id })
+            .attr('id', function (d: any) {
+                return 'id' + id + d.id
+            })
             .style('opacity', '0.6')
         circle.transition()
             .duration(3000)
             .attr('r', 10)
-
     }
-    function borrarCircles() {
-        scientists!.map((e: data) => {
-            let a = d3.select('#id' + e.id)
+
+    function erase(x: data[], id: number) {
+        x!.map((e: data) => {
+            let a = d3.select('#id' + id + e.id)
                 .transition()
                 .duration(3000)
                 .attr('r', 0)
-            d3.select('#id' + e.id)
-                .exit()
+            d3.select('#id' + e.id + e.id)
                 .remove()
         })
     }
@@ -82,6 +98,10 @@ export default function circlecolor() {
         setFriends(frie)
         setScientists(scienti)
         setCdc(cd)
+        setLocalh(lo)
+        setJournalists(jour)
+        setReligious(rel)
+        setPoliticians(poli)
 
         let xScale = d3.scaleLinear()
             .domain([1, 100])
@@ -118,14 +138,42 @@ export default function circlecolor() {
             .attr('x2', size.width! - margin.right)
             .attr('y2', size.height! / 2)
             .attr('stroke', 'black')
+
+        let l = d3.select(ref3.current)
+        l.selectAll('circle')
+            .data(color)
+            .enter()
+            .append('circle')
+            .attr('cx', function (d, i) { return (i + 1) * 100 })
+            .attr('cy', function (d, i) { return 80 })
+            .attr('r', 8)
+            .attr('fill', function (d) { return d })
+            .attr('stroke', function (d) { return d })
+
+        l.selectAll('text')
+            .data(variables)
+            .enter()
+            .append('text')
+
+            .attr('font-weight', 'bold')
+            .style('opacity', '1')
+            .attr('font-size', '10px')
+            .attr('x', function (d: any, i: any) {
+                return (i + 1) * 100 + 13
+            })
+            .attr('y', 80)
+            .text(function (d: string, i) { return d })
+
     }, [])
     return (<div>
         <div>
-            <svg width='800' height='600' ref={ref2} style={{ float: 'left' }} >
+            <svg width='800' height='100' ref={ref3} style={{ display: 'block' }} />
+            <svg width='800' height='600' ref={ref2} style={{ display: 'block' }}>
                 <g ref={ref} transform='translate(50, 550)'></g>
             </svg>
-            <button className={'btn-btnprimary'} onClick={() => circles('JUNE')}>JUNE</button>
-            <button className={'btn-btnprimary'} onClick={() => borrarCircles()}>JULY</button>
+            <button className={'btn-btnprimary'} onClick={() => generateCircles('JUNE')}>JUNE</button>
+            <button className={'btn-btnprimary'} onClick={() => generateCircles('JULY')}>JULY</button>
+            <button className={'btn-btnprimary'} onClick={() => generateCircles('AUGUST')}>AUGUST</button>
 
         </div>
     </div>

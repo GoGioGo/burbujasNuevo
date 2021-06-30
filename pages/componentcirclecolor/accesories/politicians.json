@@ -30,5 +30,21 @@
         "trust": 110,
         "month": "JULY",
         "country": "Brazil"
+    },
+    {
+        "id":5,
+        "name": "Scientist and Healt experts",
+        "exposure": 443,
+        "trust": 300,
+        "month": "AUGUST",
+        "country": "Brazil"
+    },
+    {
+        "id":6,
+        "name": "Scientist and Healt experts",
+        "exposure": 222,
+        "trust": 265,
+        "month": "AUGUST",
+        "country": "Brazil"
     }
 ]

@@ -1,0 +1,34 @@
+[
+    {
+        "id":1,
+        "name": "Scientist and Healt experts",
+        "exposure": 305,
+        "trust": 189,
+        "month": "JUNE",
+        "country": "Brazil"
+    },
+    {
+        "id":2,
+        "name": "Scientist and Healt experts",
+        "exposure": 250,
+        "trust": 498,
+        "month": "JULY",
+        "country": "Brazil"
+    },
+    {
+        "id":3,
+        "name": "Scientist and Healt experts",
+        "exposure": 543,
+        "trust": 600,
+        "month": "JUNE",
+        "country": "Brazil"
+    },
+    {
+        "id":4,
+        "name": "Scientist and Healt experts",
+        "exposure": 120,
+        "trust": 250,
+        "month": "JULY",
+        "country": "Brazil"
+    }
+]

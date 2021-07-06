@@ -58,7 +58,7 @@ export default function Index() {
     const notVaccinated = useRef<SVGSVGElement | null>(null)
     const titulos = useRef<SVGSVGElement | null>(null)
     const pie = useRef<SVGSVGElement | null>(null)
-/*     const cabezaModal = useRef<SVGSVGElement | null>(null)
+/*   const cabezaModal = useRef<SVGSVGElement | null>(null)
     const percentageModal = useRef<SVGSVGElement | null>(null)
     const absisas = useRef<SVGSVGElement | null>(null)
     const footer = useRef<SVGSVGElement | null>(null) */

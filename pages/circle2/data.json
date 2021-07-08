@@ -1,48 +1,49 @@
-{
-    "country": "United States",
-    "poblation": 910000,
-    "children": [
-        {
-            "name": "New York",
-            "poblation": 230000,
-            "children": [
-                {
-                    "name": "Marine",
-                    "poblation": 33000,
-                    "children": [
-                        {
-                            "name": "Ditrit 1",
-                            "poblation": 40000
-                        },
-                        {
-                            "name": "distrit 2",
-                            "poblation": 50000
-                        }
-                    ]
-                },
-                {
-                    "name": "Fresh Water",
-                    "poblation": 43000
-                }
-            ]
-        },
-        {
-            "name": "Washington",
-            "poblation": 70000,
-            "children": [
-                {
-                    "poblation": 61000,
-                    "name": "Distrit 1"
-                },
-                {
-                    "poblation": 30000,
-                    "name": "Distrit 2"
-                },
-                {
-                    "poblation": 51000,
-                    "name": "Distrit 2"
-                }
-            ]
-        }
-    ]
-}
+
+    {
+        "country": "United States",
+        "poblation": 910000,
+        "children": [
+            {
+                "name": "New York",
+                "poblation": 230000,
+                "children": [
+                    {
+                        "name": "Marine",
+                        "poblation": 33000,
+                        "children": [
+                            {
+                                "name": "Ditrit 1",
+                                "poblation": 40000
+                            },
+                            {
+                                "name": "distrit 2",
+                                "poblation": 50000
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Fresh Water",
+                        "poblation": 43000
+                    }
+                ]
+            },
+            {
+                "name": "Washington",
+                "poblation": 70000,
+                "children": [
+                    {
+                        "poblation": 61000,
+                        "name": "Distrit 1"
+                    },
+                    {
+                        "poblation": 30000,
+                        "name": "Distrit 2"
+                    },
+                    {
+                        "poblation": 51000,
+                        "name": "Distrit 2"
+                    }
+                ]
+            }
+        ]
+    }

@@ -8,7 +8,6 @@ import CircleA from './circle2/CircleA'
 export default function Home() {
     return (<>
         <CircleA />
-        <CircleAnidate />
     </>
     )
 }

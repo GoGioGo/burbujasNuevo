@@ -58,11 +58,7 @@ export default function Index() {
     const notVaccinated = useRef<SVGSVGElement | null>(null)
     const titulos = useRef<SVGSVGElement | null>(null)
     const pie = useRef<SVGSVGElement | null>(null)
-/*   const cabezaModal = useRef<SVGSVGElement | null>(null)
-    const percentageModal = useRef<SVGSVGElement | null>(null)
-    const absisas = useRef<SVGSVGElement | null>(null)
-    const footer = useRef<SVGSVGElement | null>(null) */
-    //array con textos para los marcos
+
     let per = ['0%', '20%', '40%', '60%', '80%', '100%']
     let abs = ['2.0', '4.5', '7.0', '9.5']
     let tit = ['Fully Vaccinated', 'Partially Vaccinated', 'Not Vaccinated']
@@ -76,31 +72,6 @@ export default function Index() {
         graficaRectas(size, 2, 'yellow')
         graficaRectas(size, 3, 'blue')
 
-
-
-        /* let cm2: propC = findJson(x.id, fullyV2)
-        let cm3: propC = findJson(x.id, fullyV3)
-        let cn1: propC = findJson(x.id, notV1)
-        let cn2: propC = findJson(x.id, notV2)
-        let cn3: propC = findJson(x.id, notV3)
-        let cp1: propC = findJson(x.id, partiallyV1)
-        let cp2: propC = findJson(x.id, partiallyV2)
-        let cp3: propC = findJson(x.id, partiallyV3)
-
-        graflinea(x, cm2, cm3, 'graphic', 'orange')
-        graflinea(cn1, cn2, cn3, 'graphic', 'black')
-        graflinea(cp1, cp2, cp3, 'graphic', 'blue')
-
-        printLine({ x1: 5, y1: 52, x2: 300, y2: 52, opacity: '.3' }, 'graphic', 'black')
-        printLine({ x1: 5, y1: 123, x2: 300, y2: 123, opacity: '.3' }, 'graphic', 'black')
-        printLine({ x1: 5, y1: 192, x2: 300, y2: 192, opacity: '.3' }, 'graphic', 'black')
-
-        text({ x: 10, y: 12, text: 'NERVOUSNESS BY SURVEY RESPONDENTS', size: '14px' }, cabezaModal)
-        setText(per.reverse(), percentageModal, 25, 35, '12px', false)
-        setText(abs, absisas, 110, 15, '12px', true)
-        setText(tit, footer, 130, 30, '14px', true)
-        setge(x)
-        setmodal(true) */
     }
    
     let color = '#9ca8ab'
@@ -131,7 +102,6 @@ export default function Index() {
     }
 
     useEffect(() => {
-        //imprimiendo circulos y textos con mayor poblacion media y poblacion parcial
         printCircleP(fullyV1, fullyVaccinated, color, 'f')
         text(findBigEstate(fullyV1), fullyVaccinated)
         text(findBigEstateM(fullyV1), fullyVaccinated)
@@ -141,7 +111,6 @@ export default function Index() {
         printCircleP(notV1, notVaccinated, color, 'n')
         text(findBigEstate(notV1), notVaccinated)
         text(findBigEstateM(notV1), notVaccinated)
-        //imprimiendo titulos y porcentajes
         setText(per, pie, 95, 10, '12px', true)
         setText(tit, titulos, 25, 115, '12px', false)
         d3.selectAll('circle')

@@ -25,7 +25,6 @@ export default function CircleA() {
 
         var rot = d3.hierarchy(data)
             .sum(function (d) { return d.size; })
-            //.sum(() => 1)
             .sort(function (a: any, b: any) { return b.value - a.value; })
         focus = rot;
         nodes = pack(rot).descendants();
@@ -73,3 +72,4 @@ export default function CircleA() {
         </div>
     )
 }
+

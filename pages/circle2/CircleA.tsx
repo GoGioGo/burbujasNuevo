@@ -4,76 +4,68 @@ import Da from './data.json'
 import Fla from './flare.json'
 
 export default function CircleA() {
-
     const ref = useRef<SVGSVGElement | null>(null)
-    const [data, setDat] = useState<any | null>(Da)
+    const [data, setDat] = useState<any | null>(Fla)
+    var svg: any
+    //ESTE DATO ES EL PROBLEMA
+    var view=[470, 470, 960]
+    var margin = 20
+    var diameter: any
+    var nodes: any
+    var node: any
 
-    const animalsHierarchy = d3.hierarchy(data).sum(() => 1)
-    const createPack = d3.pack().size([500, 500]).padding(10)
-    const statePack = createPack(animalsHierarchy)
-    let colors = ['#efefef', '#c5c9cb', '#9a9fa1', '#849494', '#b67e82', '#bf948c', '#646c73', 'yellow', 'blue', 'orange']
-    let focus = statePack;
-    console.log(focus, 'state =>', statePack)
+    var circle: any
+    var focus: any
 
-    /*  function zoom(d:any) {
-        var focus0 = focus; focus = d;
+    function initial() {
 
-        var transition = d3.transition()
-            .duration(3000)
-            .attrTween("transform", function (d) {
-                var i = d3.interpolateZoom(v, [focus.x, focus.y, focus.r * 2 + margin]);
-                return function (t) { zoomTo(i(t)); };
-            });
+        var g = svg.append("g").attr("transform", "translate(" + 1 + "," + 1 + ")");
+        var pack = d3.pack()
+            .size([diameter - margin, diameter - margin])
 
-        transition.selectAll("text")
-            .filter(function (d:any) { return d.parent === focus || this.style.display === "inline"; })
-            .style("fill-opacity", function (d:any) { return d.parent === focus ? 1 : 0; })
-            .on("start", function (d:any) { if (d.parent === focus) this.style.display = "inline"; })
-            .on("end", function (d:any) { if (d.parent !== focus) this.style.display = "none"; });
-    } 
- */
-
-    // const interpolator = d3.interpolateZoom((start:any), (end:any))
-
-    useEffect(() => {
-        let a = d3.select(ref.current)
-            .selectAll('circle')
-            .data(statePack.descendants())
-            .enter()
-            .append('circle')
+        var rot = d3.hierarchy(data)
+            .sum(function (d) { return d.size; })
+            //.sum(() => 1)
+            .sort(function (a: any, b: any) { return b.value - a.value; })
+        focus = rot;
+        nodes = pack(rot).descendants();
+        circle = g.selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("class", function (d: any) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
             .attr('cx', function (d: any) { return d.x })
             .attr('cy', function (d: any) { return d.y })
             .attr('r', function (d: any) { return d.r })
-            .attr('fill', function (d, i) { return colors[i] })
+            .attr('fill', 'transparent')
             .attr('stroke', 'black')
-            .on("mouseover", function () { d3.select(this).attr("stroke", "#000"); })
-            .on("mouseout", function () { d3.select(this).attr("stroke", null); })
-        //           .on("click", function (d) { if (focus !== d) zoom(d)});
+            .on("click", function (d: any) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
+        node = g.selectAll("circle,text");
 
-        d3.select(ref.current)
-            .selectAll('text')
-            .data(statePack.descendants().slice(1))
-            .enter()
-            .append('text')
-            .attr('x', function (d: any) { return d.x })
-            .attr('y', function (d: any) { return d.y })
-            .text(function (d: any) { return d.data.name })
-            .attr('font-weight', 'bold')
-            .style('opacity', '1')
-            .attr('font-size', '10px')
-            .attr('font-color', 'black')
-
-        /*             function transform(t:any) {
-                        
-                        const view = interpolator(t);
-                      
-                        const k = Math.min(w, h) / view[2]; // scale
-                        const translate = [w / 2 - view[0] * k, h / 2 - view[1] * k]; // translate
-                      
-                        return `translate(${translate}) scale(${k})`;
-                      } */
-
-
+    }
+    function zoom(d: any) {
+        var focus0 = focus; focus = d;
+        console.log('view=>', view, 'llego hasta aqui')
+        
+        var transition = d3.transition()
+            .duration(750)
+            .tween("zoom", function (d) {
+                var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+                return function (t) { zoomTo(i(t)); };
+            });
+        transition.selectAll("text")
+            .filter(function (d: any) { return d.parent === focus })
+            .style("fill-opacity", function (d: any) { return d.parent === focus ? 1 : 0; })
+    }
+    function zoomTo(v: any) {
+        console.log('no llego aqui')
+        var k = diameter / v[2]; view = v;
+        node.attr("transform", function (d: any) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+        circle.attr("r", function (d: any) { return d.r * k; });
+    }
+    useEffect(() => {
+        svg = d3.select(ref.current)
+        diameter = +svg.attr("width")
+        initial()
     }, [])
     return (
         <div>

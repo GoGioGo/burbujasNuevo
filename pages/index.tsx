@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar'
 import Circlecolor from './componentcirclecolor/circlecolor'
 import CircleAnidate from './compCircleAnidate/circleAnidate'
 import CircleA from './circle2/CircleA'
+import Prueba from './prueba/Prueba'
 export default function Home() {
     return (<>
         <CircleA />

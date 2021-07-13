@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import * as d3 from 'd3'
 import Flare from './flare.json'
 
-export default function circleAnidate() {
+export default function CircleAnidate() {
     var data = [
         { "child": "Jhon", "parent": "" },
         { "child": "Aaron", "parent": "Kevin" },
@@ -60,7 +60,6 @@ export default function circleAnidate() {
     }, [])
     return (
         <div id='gio'>
-
         </div>
     )
 }

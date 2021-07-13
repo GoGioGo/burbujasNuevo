@@ -12,7 +12,7 @@ import lo from './accesories/local.json'
 import poli from './accesories/politicians.json'
 import rel from './accesories/religious.json'
 
-export default function circlecolor() {
+export default function CircleColor() {
 
     const [localH, setLocalh] = useState<data[] | null>([])
     const [scientists, setScientists] = useState<data[] | null>([])

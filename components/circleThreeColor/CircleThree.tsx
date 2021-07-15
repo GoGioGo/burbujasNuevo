@@ -22,7 +22,6 @@ export default function CircleThree() {
         var pack = d3.pack()
             .size([diameter - margin, diameter - margin])
 
-
         var root: any = d3.hierarchy(data)
             .sum(function (d) { return d.age / 10; })
             .sort(function (a: any, b: any) { return b.value - a.value; })

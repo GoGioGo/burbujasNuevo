@@ -1,13 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
+import { findJson } from '../../functions/Functions';
 
 export default function ThreeColorCircle() {
+
+
+
+    const a3 = useRef<HTMLInputElement>(null);
+    const b3 = useRef<HTMLInputElement>(null);
+    const c3 = useRef<HTMLInputElement>(null);
 
     interface cordenate {
         x: number,
         y: number
     }
     //Porcentajes
+    const [aa, setaa] = useState<number>()
     let a = 15
     let b = 55
     let c = 30
@@ -33,7 +41,6 @@ export default function ThreeColorCircle() {
                     indice++
                 }
             }
-
         }
     }
 
@@ -64,6 +71,9 @@ export default function ThreeColorCircle() {
             .data(data)
             .enter()
             .append('circle')
+            .attr('id', function (d, i) {
+                return 'circle' + i
+            })
             .attr('cx', function (d: any, i) {
                 return d.x
             })
@@ -102,14 +112,92 @@ export default function ThreeColorCircle() {
                 }
             })
     }
+    function execute() {
+        let svg = d3.select('#div1')
+            .selectAll('circle')
+        for (let i = 0; i < data.length; i++) {
+            svg.filter('#circle' + i)
+                .transition()
+                .duration(3000)
+                .attr('r', 0)
+                /* .transition()
+                .duration(3000)
+                .attr('r', radius*0.8)
+                .attr('fill', 'black') */
+
+        }
+        
+        setTimeout(() => {
+            transition()
+        }, 3000);
+    }
+    function transition() {
+        a = Math.ceil(data.length * parseInt(a3.current!.value) / 100)
+        b = Math.ceil(data.length * parseInt(b3.current!.value) / 100)
+        c = Math.ceil(data.length * parseInt(c3.current!.value) / 100)
+        let a1 = 0, b1 = 0, c1 = 0
+        let a2 = 0, b2 = 0, c2 = 0
+
+        let svg = d3.select('#div1')
+            .selectAll('circle')
+        for (let i = 0; i < data.length; i++) {
+            svg.filter('#circle' + i)
+                .transition()
+                .duration(3000)
+                .attr('r', radius * 0.85)
+                .attr('fill', function (d, i) {
+                    if (a1 < a) {
+                        a1++
+                        return color[0]
+                    }
+                    else {
+                        if (b1 < b) {
+                            b1++
+                            return color[1]
+                        }
+                        else {
+                            c1++
+                            return color[2]
+                        }
+                    }
+                })
+                .attr('stroke', function (d, i) {
+                    if (a2 < a) {
+                        a2++
+                        return color[0]
+                    }
+                    else {
+                        if (b2 < b) {
+                            b2++
+                            return color[1]
+                        }
+                        else {
+                            c2++
+                            return color[2]
+                        }
+                    }
+                })
+        }
+    }
 
     useEffect(() => {
+
         generate(400, radius)
         graphCircle()
     }, [])
 
-    return (
+    return (<>
         <div id='div1' style={{ padding: '20px' }}>
         </div>
+        <div>
+            <h2>Porcentajes</h2>
+            <input ref={a3} type='number' />
+            <input ref={b3} type='number' />
+            <input ref={c3} type='number' />
+
+            <button onClick={() => execute()}>EnviarPorcentajes</button>
+
+        </div>
+    </>
     )
 }

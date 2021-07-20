@@ -193,7 +193,7 @@ export default function ThreeColorCircle() {
             <h2>Porcentajes</h2>
             <input ref={a3} type='number' />
             <input ref={b3} type='number' />
-            <input ref={c3} type='number' />
+            <input ref={c3} type='number' />        
 
             <button onClick={() => execute()}>EnviarPorcentajes</button>
 

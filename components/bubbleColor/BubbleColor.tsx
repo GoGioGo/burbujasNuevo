@@ -2,87 +2,89 @@ import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
 import { Bubble } from '../../interfaces/Interfaces'
 
-let array1: Bubble[] = [
-    {
-        value: 0.639275,
-        n: 640,
-        country: 'Brazil'
-    }, {
-        value: 0.44243,
-        n: 626,
-        country: 'Angola'
-    }, {
-        value: 0.25663,
-        n: 599,
-        country: 'United States'
-    }, {
-        value: 0.76662,
-        n: 656,
-        country: 'United Kingdom'
-    }, {
-        value: 0.32345,
-        n: 670,
-        country: 'Germany'
-    },
-]
+export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble[], array2: Bubble[], array3: Bubble[] }) {
 
-let array2: Bubble[] = [
-    {
-        value: 0.539275,
-        n: 840,
-        country: 'Brazil'
-    }, {
-        value: 0.74243,
-        n: 426,
-        country: 'Angola'
-    }, {
-        value: 0.35663,
-        n: 199,
-        country: 'United States'
-    }, {
-        value: 0.86662,
-        n: 456,
-        country: 'United Kingdom'
-    }, {
-        value: 0.12345,
-        n: 870,
-        country: 'Germany'
-    },
-]
+    let arra3: Bubble[] = [
+        {
+            value: 0.639275,
+            n: 640,
+            country: 'Brazil'
+        }, {
+            value: 0.44243,
+            n: 626,
+            country: 'Angola'
+        }, {
+            value: 0.25663,
+            n: 599,
+            country: 'United States'
+        }, {
+            value: 0.76662,
+            n: 656,
+            country: 'United Kingdom'
+        }, {
+            value: 0.32345,
+            n: 670,
+            country: 'Germany'
+        },
+    ]
 
-let array3: Bubble[] = [
-    {
-        value: 0.639275,
-        n: 640,
-        country: 'Brazil'
-    }, {
-        value: 0.44243,
-        n: 626,
-        country: 'Angola'
-    }, {
-        value: 0.25663,
-        n: 599,
-        country: 'United States'
-    }, {
-        value: 0.76662,
-        n: 656,
-        country: 'United Kingdom'
-    }, {
-        value: 0.32345,
-        n: 670,
-        country: 'Germany'
-    }, {
-        value: 0.62345,
-        n: 470,
-        country: 'France'
-    },
-]
+    let arra1: Bubble[] = [
+        {
+            value: 0.539275,
+            n: 840,
+            country: 'Brazil'
+        }, {
+            value: 0.74243,
+            n: 426,
+            country: 'Angola'
+        }, {
+            value: 0.35663,
+            n: 199,
+            country: 'United States'
+        }, {
+            value: 0.86662,
+            n: 456,
+            country: 'United Kingdom'
+        }, {
+            value: 0.12345,
+            n: 870,
+            country: 'Germany'
+        },
+    ]
 
-export default function BubbleColor( {array1, array2, array3 }:{array1: Bubble[], array2: Bubble[], array3: Bubble[] }) {
+    let arra2: Bubble[] = [
+        {
+            value: 0.639275,
+            n: 640,
+            country: 'Brazil'
+        }, {
+            value: 0.44243,
+            n: 626,
+            country: 'Angola'
+        }, {
+            value: 0.25663,
+            n: 599,
+            country: 'United States'
+        }, {
+            value: 0.76662,
+            n: 656,
+            country: 'United Kingdom'
+        }, {
+            value: 0.32345,
+            n: 670,
+            country: 'Germany'
+        }, {
+            value: 0.62345,
+            n: 470,
+            country: 'France'
+        },
+    ]
 
-    const [country, setCountry] = useState('')
 
-    let width = 1200, height = 300, margin = 8, radius = height * 0.017
+
+    const [country, setCountry] = useState('Bolivia')
+
+    let width = 800, height = 300, margin = 8, radius = height * 0.017
     let textBubble = ['Yes, I am Vaccinated with two doses', 'Yes, I am Vaccinated with one dose', 'I m not Vaccinated']
     textBubble = textBubble.reverse()
     let colors = ['#7cbdd8', '#c2d9e3', '#f7d4a1']
@@ -112,32 +114,32 @@ export default function BubbleColor( {array1, array2, array3 }:{array1: Bubble[]
             .attr('stroke', function (d: any) { return colors[type] })
             .attr('fill', function (d: any) { return colors[type] })
             .on('click', function (d: any, i: any, n: any) {
+
                 d3.select(n[i])
-                    .attr('fill', function (d: any) { return colors[type + 1] })
-
+                    .attr('fill', function (d: any) {
+                        setCountry(d.country)
+                        return colors[type + 1]
+                    })
             })
-
         let Me = x.sort((x, y) => x - y)
-        console.log(Me)
         let median = 0
         if (Me.length % 2 != 0)
             median = Me[Math.floor(Me.length / 2)]
         else {
             median = (Me[Math.floor(Me.length / 2) - 1] + Me[Math.floor(Me.length / 2) + 1]) / 2
         }
-        console.log(median)
         svg.append('line')
             .attr('x1', function (d: any) { return scaleX1(median) })
             .attr('y1', -margin)
             .attr('x2', function (d: any) { return scaleX1(median) })
             .attr('y2', -height / 3 + margin * 2)
             .attr('stroke', 'black')
-        console.log(width * 0.13)
-
+            .attr('id', 'line' + type)
         if (scaleX1(median) >= width * 0.13) {
             svg.append('text')
                 .attr('x', function (d: any) { return scaleX1(median) - width * 0.13 })
-                .attr('y', -height / 3 + margin * 2, 7)
+                .attr('y', -height / 3 + margin * 2)
+                .attr('id', 'text' + type)
                 .text('Median Percentage')
                 .style('font-size', function (d: any) { return width * 0.014 })
                 .style('font-family', 'bold')
@@ -230,20 +232,88 @@ export default function BubbleColor( {array1, array2, array3 }:{array1: Bubble[]
         bubbleGraph(circlesOneDoses, array2, x2, y2, 1, min, max)
         bubbleGraph(circlesNotVaccinated, array3, x3, y3, 2, min, max)
 
+        insertText(circlesTwoDoses, 0, min, max)
 
-        let Me1 = x1.sort((x, y) => x - y)
-        let Me2 = x2.sort((x, y) => x - y)
-        let Me3 = x3.sort((x, y) => x - y)
 
-        console.log(x1)
+    }
+    function insertText(svg: any, type: number, min: number, max: number) {
+        var scaleX1 = d3.scaleLinear()
+            .domain([min, max])
+            .range([margin * 3, width - (width * 0.25) - margin * 3])
+        svg.append('text')
+            .attr('x', function (d: any) { return scaleX1(max) - width * 0.13 })
+            .attr('y', 5)
+            .text(country)
     }
 
     useEffect(() => {
         graphBubble()
     }, [])
+
+    function transition(array1: Bubble[], type: number, x: number[], y: number[], min: number, max: number) {
+        console.log('entro')
+        var scaleX1 = d3.scaleLinear()
+            .domain([min, max])
+            .range([margin * 3, width - (width * 0.25) - margin * 3])
+
+        var scaleY1 = d3.scaleLinear()
+            .domain([Math.min(...y), Math.max(...y)])
+            .range([margin, height / 3 - margin * 3])
+
+        for (let i = 0; i < array1.length; i++) {
+            d3.select('#circle' + type + i)
+                .transition()
+                .duration(2000)
+                .attr('cx', function (d: any) {
+                    console.log(scaleX1(array1[i].value))
+                    return scaleX1(array1[i].value)
+                })
+                .attr('cy', function (d: any) {
+                    return -scaleY1(array1[i].n)
+                })
+        }
+        let Me = x.sort((x, y) => x - y)
+        let median = 0
+        if (Me.length % 2 != 0)
+            median = Me[Math.floor(Me.length / 2)]
+        else {
+            median = (Me[Math.floor(Me.length / 2) - 1] + Me[Math.floor(Me.length / 2) + 1]) / 2
+        }
+        d3.select('#line' + type)
+            .transition()
+            .duration(2000)
+            .attr('x1', function (d: any) { return scaleX1(median) })
+            .attr('y1', -margin)
+            .attr('x2', function (d: any) { return scaleX1(median) })
+            .attr('y2', -height / 3 + margin * 2)
+
+        d3.select('#text' + type)
+            .transition()
+            .duration(2000)
+            .attr('x', function (d: any) { return scaleX1(median) - width * 0.13 })
+            .attr('y', -height / 3 + margin * 2)
+    }
+    function click() {
+
+        let x1: number[] = arra1.map(function (x: any) { return x.value })
+        let x2: number[] = arra2.map(function (x: any) { return x.value })
+        let x3: number[] = arra3.map(function (x: any) { return x.value })
+
+        let y1: number[] = arra1.map(function (y: any) { return y.n })
+        let y2: number[] = arra2.map(function (y: any) { return y.n })
+        let y3: number[] = arra3.map(function (y: any) { return y.n })
+
+        let min = Math.min(...x1, ...x2, ...x3)
+        let max = Math.max(...x1, ...x2, ...x3)
+
+        transition(arra1, 0, x1, y1, min, max)
+        transition(arra2, 1, x2, y2, min, max)
+        transition(arra3, 2, x3, y3, min, max)
+
+    }
     return (
         <div id='bubbleColor'>
-
+            <button onClick={() => click()}>transition</button>
         </div>
     )
 }

@@ -11,34 +11,86 @@ import BubbleColor from '../components/bubbleColor/BubbleColor'
 import { Bubble } from '../interfaces/Interfaces'
 
 export default function Home() {
-    let array: Bubble[] = [
+    let array1: Bubble[] = [
         {
             value: 0.639275,
             n: 640,
             country: 'Brazil'
-        },{
+        }, {
             value: 0.44243,
             n: 626,
             country: 'Angola'
-        },{
-            value: 0.15663,
+        }, {
+            value: 0.25663,
             n: 599,
             country: 'United States'
-        },{
+        }, {
             value: 0.76662,
             n: 656,
             country: 'United Kingdom'
-        },{
+        }, {
             value: 0.32345,
             n: 670,
             country: 'Germany'
+        },
+    ]
+    
+    let array2: Bubble[] = [
+        {
+            value: 0.539275,
+            n: 840,
+            country: 'Brazil'
+        }, {
+            value: 0.74243,
+            n: 426,
+            country: 'Angola'
+        }, {
+            value: 0.35663,
+            n: 199,
+            country: 'United States'
+        }, {
+            value: 0.86662,
+            n: 456,
+            country: 'United Kingdom'
+        }, {
+            value: 0.12345,
+            n: 870,
+            country: 'Germany'
+        },
+    ]
+    
+    let array3: Bubble[] = [
+        {
+            value: 0.639275,
+            n: 640,
+            country: 'Brazil'
+        }, {
+            value: 0.44243,
+            n: 626,
+            country: 'Angola'
+        }, {
+            value: 0.25663,
+            n: 599,
+            country: 'United States'
+        }, {
+            value: 0.76662,
+            n: 656,
+            country: 'United Kingdom'
+        }, {
+            value: 0.32345,
+            n: 670,
+            country: 'Germany'
+        }, {
+            value: 0.62345,
+            n: 470,
+            country: 'France'
         },
     ]
 
 
     return (<>
 
-        <BubbleColor  array1={array} array2={array} array3={array}  />
+        <BubbleColor  array1={array1} array2={array2} array3={array3}  />
 
     </>
     )

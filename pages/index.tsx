@@ -9,7 +9,8 @@ import CircleThree from '../components/circleThreeColor/CircleThree'
 import ThreeColorCircle from '../components/threeColorCircle/ThreeColorCircle'
 import BubbleColor from '../components/bubbleColor/BubbleColor'
 import { Bubble } from '../interfaces/Interfaces'
-
+import Prueba from '../components/prueba/Prueba'
+import { useEffect, useState } from 'react'
 export default function Home() {
     let array1: Bubble[] = [
         {
@@ -34,7 +35,7 @@ export default function Home() {
             country: 'Germany'
         },
     ]
-    
+
     let array2: Bubble[] = [
         {
             value: 0.539275,
@@ -58,7 +59,7 @@ export default function Home() {
             country: 'Germany'
         },
     ]
-    
+
     let array3: Bubble[] = [
         {
             value: 0.639275,
@@ -87,10 +88,20 @@ export default function Home() {
         },
     ]
 
+    const [a1, setA1] = useState(array1)
 
+    function cambia() {
+        setA1(array3)
+    }
+
+    useEffect(() => {
+
+    }, [a1])
     return (<>
 
-        <BubbleColor  array1={array1} array2={array2} array3={array3}  />
+        <button onClick={cambia}>click</button>
+        <BubbleColor array1={a1} array2={array2} array3={array3} />
+        {/* <Prueba /> */}
 
     </>
     )

@@ -1,46 +1,104 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Data from '../circle2/data.json'
+/* import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 
 export default function Prueba() {
-    const ref = useRef<SVGSVGElement | null>(null)
-    const [data, setDat] = useState<any | null>(Data)
-    const animalsHierarchy = d3.hierarchy(data).sum(() => 1)
-    const createPack = d3.pack().size([500, 500]).padding(10)
-    const statePack = createPack(animalsHierarchy)
-    let colors = ['#efefef', '#c5c9cb', '#9a9fa1', '#849494', '#b67e82', '#bf948c', '#646c73', 'yellow', 'blue', 'orange']
+    let a = [10, 20, 30]
+    let b = [10, 20, 30, 40]
+    let width = 800, height = 600, margin = 10
+    useEffect(() => {
+        //graph()
+    }, [])
+    function graph() {
+        var svg = d3.select('#gio')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+        var circle = svg.selectAll('circle')
+            .data(a)
+            .enter()
+            .join(
+                enter => enter
+                    .append('circle')
+                    .attr('cx', function (d) {
+                        return d * 10
+                    })
+                    .attr('cy', function (d, i) {
+                        return i * 10
+                    })
+                    .attr('r', 15)
+                    .attr('stroke', 'black'),
+                update => update.transition()
+                    .duration(2000)
+                    .attr('cx', function (d) { return d })
+                    .attr('cy', function (d, i) { return i * 20 })
+            )
+    }
+    return <div id='gio'>
+            Hola mundo
+    </div>
+}
+ */
+
+
+import React, { useEffect } from 'react'
+import * as d3 from 'd3'
+
+export default function Prueba() {
+    let a = [10, 20, 30]
+    let b = [13, 23, 33, 45]
+    let width = 800, height = 300, margin = 10
+
+    let svg: any
+    let circle: any
+
+    function graph(circle: any, array: number[]) {
+
+        circle.selectAll('circle')
+            .data(array)
+            .join(
+                function (enter: any) {
+                    return enter.append('circle')
+                        .attr('cx', function (d: any) {
+                            return d * 10
+                        })
+                        .attr('cy', function (d: any, i: any) {
+                            return i * 10
+                        })
+                        .attr('r', 15)
+                        .attr('stroke', 'black')
+                },
+                function (update: any) {
+                    return update.transition()
+                        .duration(2000)
+                        .attr('cx', function (d: any) {
+                            return d * 10
+                        })
+                        .attr('cy', function (d: any, i: any) {
+                            return i * 10
+                        })
+                })
+
+    }
+    function click() {
+        graph(circle, a)
+    }
+
+    function text(){
+        
+    }
 
     useEffect(() => {
-
-        let a = d3.select(ref.current)
-            .selectAll('circle')
-            .data(statePack.descendants())
-            .enter()
-            .append('circle')
-            .attr('cx', function (d: any) { return d.x })
-            .attr('cy', function (d: any) { return d.y })
-            .attr('r', function (d: any) { return d.r })
-            .attr('fill', function (d, i) { return colors[i] })
-            .attr('stroke', 'black')
-            .on("mouseover", function () { d3.select(this).attr("stroke", "#000"); })
-            .on("mouseout", function () { d3.select(this).attr("stroke", null); })
-
-        d3.select(ref.current)
-            .selectAll('text')
-            .data(statePack.descendants().slice(1))
-            .enter()
-            .append('text')
-            .attr('x', function (d: any) { return d.x })
-            .attr('y', function (d: any) { return d.y })
-            .text(function (d: any) { return d.data.name })
-            .attr('font-weight', 'bold')
-            .style('opacity', '1')
-            .attr('font-size', '10px')
-            .attr('font-color', 'black')
+        svg = d3.select('#gio')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+        circle = svg.append('g')
+        graph(circle, b)
     }, [])
-    return (
-        <div>
-            <svg ref={ref} width='960' height='960' />
+    return (<>
+        <div id='gio'>
         </div>
+        <button onClick={() => click()}>transition</button>
+    </>
     )
 }

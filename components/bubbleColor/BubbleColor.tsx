@@ -1,8 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { Bubble } from '../../interfaces/Interfaces'
+import { color } from 'd3';
 
 export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble[], array2: Bubble[], array3: Bubble[] }) {
+
+    let iniRef1: any;
+    let iniRef2: any;
+    let iniRef3: any;
+
+    let iniColor1 = '';
+    let sw1 = 0;
+    let iniColor2 = '';
+    let sw2 = 0;
+    let iniColor3 = '';
+    let sw3 = 0;
 
     let svg: any
     let circleTwoDoses: any
@@ -14,9 +26,9 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
     let notVaccinatedLine: any
 
     let aa = [1]
-    let mini: any, maxi: any
+    let min: any, max: any
     let scaleX: any
-    let width = 800, height = 300, margin = 8, radius = height * 0.017
+    let width = 800, height = 300, margin = 8, radius = height * 0.02
 
     const ref = useRef(null)
 
@@ -96,18 +108,9 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         },
     ]
 
-    const [country, setCountry] = useState('Bolivia')
-
     let textBubble = ['Yes, I am Vaccinated with two doses', 'Yes, I am Vaccinated with one dose', 'I m not Vaccinated']
     textBubble = textBubble.reverse()
     let colors = ['#7cbdd8', '#c2d9e3', '#f7d4a1']
-
-    function insertText(svg: any, type: number, min: number, max: number) {
-        svg.append('text')
-            .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
-            .attr('y', 5)
-            .text(country)
-    }
 
     function leftText() {
         let initialDistanceText = height / (textBubble.length)
@@ -172,13 +175,6 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
                         .attr('id', function (d: any, i: any) { return 'circle' + type + i })
                         .attr('stroke', function (d: any) { return colors[type] })
                         .attr('fill', function (d: any) { return colors[type] })
-                        .on('click', function (d: any, i: any, n: any) {
-                            d3.select(n[i])
-                                .attr('fill', function (d: any) {
-                                    setCountry(d.country)
-                                    return colors[type + 1]
-                                })
-                        })
                 },
                 function (update: any) {
                     return update.transition()
@@ -221,7 +217,6 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
                         .transition()
                         .duration(2000)
                         .attr('x1', function (d: any) {
-                            console.log('entro bien duro')
                             return scaleX(median)
                         })
                         .attr('y1', -margin)
@@ -278,11 +273,11 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         let y2: number[] = array2.map(function (y: any) { return y.n })
         let y3: number[] = array3.map(function (y: any) { return y.n })
 
-        mini = Math.min(...x1, ...x2, ...x3)
-        maxi = Math.max(...x1, ...x2, ...x3)
+        min = Math.min(...x1, ...x2, ...x3)
+        max = Math.max(...x1, ...x2, ...x3)
 
         scaleX = d3.scaleLinear()
-            .domain([mini, maxi])
+            .domain([min, max])
             .range([margin * 3, width - (width * 0.25) - margin * 3])
 
         svg = d3.select(ref.current)
@@ -316,6 +311,157 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         medianText(circleTwoDosesLine, x1, 0, aa)
         medianText(circleOneDoseLine, x2, 1, aa)
         medianText(notVaccinatedLine, x3, 2, aa)
+
+        d3.selectAll('circle')
+            .on('click', function () {
+                d3.select(this)
+                    .attr('fill', function (d: any, i: any, n: any) {
+                        if (n[i].getAttribute('id').charAt(6) === '0') {
+                            if (iniRef1 !== this) {
+                                circleTwoDoses.selectAll('text')
+                                    .data(aa)
+                                    .join(
+                                        function (enter: any) {
+                                            return enter.append('text')
+                                                .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                .attr('y', 5)
+                                                .text(d.country)
+                                        },
+                                        function (update: any) {
+                                            return update
+                                                .text(d.country)
+                                        }
+                                    )
+                                if (sw1 == 0) {
+                                    sw1 = 1;
+                                    iniRef1 = this
+                                    iniColor1 = n[i].getAttribute('fill')
+                                }
+                                else {
+                                    d3.select(iniRef1)
+                                        .attr('fill', iniColor1)
+                                    iniRef1 = this
+                                    iniColor1 = n[i].getAttribute('fill')
+                                }
+                                return '#f7d4a1'
+                            }
+                            else {
+                                circleTwoDoses.selectAll('text')
+                                    .data(aa)
+                                    .join(
+                                        function (enter: any) {
+                                            return enter.append('text')
+                                                .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                .attr('y', 5)
+                                                .text(d.country)
+                                        },
+                                        function (update: any) {
+                                            return update
+                                                .text('')
+                                        }
+                                    )
+                                return colors[0]
+                            }
+                        } else {
+                            if (n[i].getAttribute('id').charAt(6) === '1') {
+                                if (iniRef2 !== this) {
+                                    circleOneDose.selectAll('text')
+                                        .data(aa)
+                                        .join(
+                                            function (enter: any) {
+                                                return enter.append('text')
+                                                    .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                    .attr('y', 5)
+                                                    .text(d.country)
+                                            },
+                                            function (update: any) {
+                                                return update
+                                                    .text(d.country)
+                                            }
+                                        )
+                                    if (sw2 == 0) {
+                                        sw2 = 1;
+                                        iniRef2 = this
+                                        iniColor2 = n[i].getAttribute('fill')
+                                    }
+                                    else {
+                                        d3.select(iniRef2)
+                                            .attr('fill', iniColor2)
+                                        iniRef2 = this
+                                        iniColor2 = n[i].getAttribute('fill')
+                                    }
+                                    return '#f7d4a1'
+                                }
+                                else {
+                                    circleOneDose.selectAll('text')
+                                        .data(aa)
+                                        .join(
+                                            function (enter: any) {
+                                                return enter.append('text')
+                                                    .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                    .attr('y', 5)
+                                                    .text(d.country)
+                                            },
+                                            function (update: any) {
+                                                return update
+                                                    .text('')
+                                            }
+                                        )
+                                    return colors[1]
+
+                                }
+                            }
+                            else {
+                                if (iniRef3 !== this) {
+                                    notVaccinated.selectAll('text')
+                                        .data(aa)
+                                        .join(
+                                            function (enter: any) {
+                                                return enter.append('text')
+                                                    .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                    .attr('y', 5)
+                                                    .text(d.country)
+                                            },
+                                            function (update: any) {
+                                                return update
+                                                    .text(d.country)
+                                            }
+                                        )
+                                    if (sw3 == 0) {
+                                        sw3 = 1;
+                                        iniRef3 = this
+                                        iniColor3 = n[i].getAttribute('fill')
+                                    }
+                                    else {
+                                        d3.select(iniRef3)
+                                            .attr('fill', iniColor3)
+                                        iniRef3 = this
+                                        iniColor3 = n[i].getAttribute('fill')
+                                    }
+                                    return '#7cbdd8'
+                                }
+                                else {
+                                    notVaccinated.selectAll('text')
+                                        .data(aa)
+                                        .join(
+                                            function (enter: any) {
+                                                return enter.append('text')
+                                                    .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
+                                                    .attr('y', 5)
+                                                    .text(d.country)
+                                            },
+                                            function (update: any) {
+                                                return update
+                                                    .text('')
+                                            }
+                                        )
+                                    return colors[2]
+
+                                }
+                            }
+                        }
+                    })
+            })
     }, [])
 
     return (<>

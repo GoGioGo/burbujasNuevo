@@ -9,10 +9,13 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
     let circleOneDose: any
     let notVaccinated: any
 
+    let circleTwoDosesLine: any
+    let circleOneDoseLine: any
+    let notVaccinatedLine: any
+
+    let aa = [1]
     let mini: any, maxi: any
-
     let scaleX: any
-
     let width = 800, height = 300, margin = 8, radius = height * 0.017
 
     const ref = useRef(null)
@@ -96,14 +99,10 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
     const [country, setCountry] = useState('Bolivia')
 
     let textBubble = ['Yes, I am Vaccinated with two doses', 'Yes, I am Vaccinated with one dose', 'I m not Vaccinated']
-
     textBubble = textBubble.reverse()
-
     let colors = ['#7cbdd8', '#c2d9e3', '#f7d4a1']
 
-
     function insertText(svg: any, type: number, min: number, max: number) {
-
         svg.append('text')
             .attr('x', function (d: any) { return scaleX(max) - width * 0.13 })
             .attr('y', 5)
@@ -124,8 +123,18 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
             .style('font-size', function (d: any) { return width * 0.014 })
             .style('font-family', 'bold')
     }
-    function click() {
 
+    function line(x1: number, y1: number, x2: number, y2: number) {
+        svg.append('line')
+            .attr('x1', x1)
+            .attr('x2', x2)
+            .attr('y1', y1)
+            .attr('y2', y2)
+            .attr('stroke', 'black')
+            .style('opacity', '0.15')
+    }
+
+    function click() {
         let x1: number[] = arra1.map(function (x: any) { return x.value })
         let x2: number[] = arra2.map(function (x: any) { return x.value })
         let x3: number[] = arra3.map(function (x: any) { return x.value })
@@ -134,20 +143,19 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         let y2: number[] = arra2.map(function (y: any) { return y.n })
         let y3: number[] = arra3.map(function (y: any) { return y.n })
 
-        let min = Math.min(...x1, ...x2, ...x3)
-        let max = Math.max(...x1, ...x2, ...x3)
+        graphBubble(circleTwoDoses, arra1, y1, 0)
+        graphBubble(circleOneDose, arra2, y2, 1)
+        graphBubble(notVaccinated, arra3, y3, 2)
 
-        graphBubleE(circleTwoDoses, arra1, y1, 0)
-        graphBubleE(circleOneDose, arra2, y2, 1)
-        graphBubleE(notVaccinated, arra3, y3, 2)
+        medianText(circleTwoDosesLine, x1, 0, aa)
+        medianText(circleOneDoseLine, x2, 1, aa)
+        medianText(notVaccinatedLine, x3, 2, aa)
     }
 
-    function graphBubleE(refer: any, array: Bubble[], y: number[], type: number) {
-
+    function graphBubble(refer: any, array: Bubble[], y: number[], type: number) {
         var scaleY1 = d3.scaleLinear()
             .domain([Math.min(...y), Math.max(...y)])
             .range([margin, height / 3 - margin * 3])
-
         refer.selectAll('circle')
             .data(array)
             .join(
@@ -184,17 +192,8 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
                 }
             )
     }
-    function line(x1: number, y1: number, x2: number, y2: number) {
-        svg.append('line')
-            .attr('x1', x1)
-            .attr('x2', x2)
-            .attr('y1', y1)
-            .attr('y2', y2)
-            .attr('stroke', 'black')
-            .style('opacity', '0.15')
-    }
 
-    function medianText(ref: any, x: number[], type: number) {
+    function medianText(ref: any, x: number[], type: number, aa: number[]) {
         let Me = x.sort((x, y) => x - y)
         let median = 0
         if (Me.length % 2 != 0)
@@ -202,11 +201,25 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         else {
             median = (Me[Math.floor(Me.length / 2) - 1] + Me[Math.floor(Me.length / 2) + 1]) / 2
         }
-        ref
+        ref.selectAll('line')
+            .data(aa)
             .join(
                 function (enter: any) {
                     return enter
                         .append('line')
+                        .attr('x1', function (d: any) {
+                            return scaleX(median)
+                        })
+                        .attr('y1', -margin)
+                        .attr('x2', function (d: any) { return scaleX(median) })
+                        .attr('y2', -height / 3 + margin * 2)
+                        .attr('stroke', 'black')
+                        .attr('id', 'line' + type)
+                },
+                function (update: any) {
+                    return update
+                        .transition()
+                        .duration(2000)
                         .attr('x1', function (d: any) {
                             console.log('entro bien duro')
                             return scaleX(median)
@@ -214,40 +227,49 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
                         .attr('y1', -margin)
                         .attr('x2', function (d: any) { return scaleX(median) })
                         .attr('y2', -height / 3 + margin * 2)
-                },
-                function (update: any) {
-                    return update
-                        .transition()
-                        .duration(2000)
-                        .attr('x1', function (d: any) { return scaleX(median) })
-                        .attr('y1', -margin)
-                        .attr('x2', function (d: any) { return scaleX(median) })
-                        .attr('y2', -height / 3 + margin * 2)
                 }
             )
-            .attr('stroke', 'black')
-            .attr('id', 'line' + type)
 
-        if (scaleX(median) >= width * 0.13) {
-            ref.append('text')
-                .attr('x', function (d: any) { return scaleX(median) - width * 0.13 })
-                .attr('y', -height / 3 + margin * 2)
-                .attr('id', 'text' + type)
-                .text('Median Percentage')
-                .style('font-size', function (d: any) { return width * 0.014 })
-                .style('font-family', 'bold')
-        }
-        else {
-            ref.append('text')
-                .attr('x', function (d: any) { return scaleX(median) + width * 0.001 })
-                .attr('y', -height / 3 + margin * 2, 7)
-                .text('Median Percentage')
-                .style('font-size', function (d: any) { return width * 0.014 })
-                .style('font-family', 'bold')
-        }
+        ref.selectAll('text')
+            .data(aa)
+            .join(
+                function (enter: any) {
+                    if (scaleX(median) >= width * 0.13) {
+                        return enter.append('text')
+                            .attr('x', function (d: any) { return scaleX(median) - width * 0.13 })
+                            .attr('y', -height / 3 + margin * 2)
+                            .attr('id', 'text' + type)
+                            .text('Median Percentage')
+                            .style('font-size', function (d: any) { return width * 0.014 })
+                            .style('font-family', 'bold')
+                    }
+                    else {
+                        return enter.append('text')
+                            .attr('x', function (d: any) { return scaleX(median) + width * 0.001 })
+                            .attr('y', -height / 3 + margin * 2, 7)
+                            .text('Median Percentage')
+                            .style('font-size', function (d: any) { return width * 0.014 })
+                            .style('font-family', 'bold')
+                    }
+                },
+                function (update: any) {
+                    if (scaleX(median) >= width * 0.13) {
+                        return update.transition()
+                            .duration(2000)
+                            .attr('x', function (d: any) { return scaleX(median) - width * 0.13 })
+                            .attr('y', -height / 3 + margin * 2)
+                    }
+                    else {
+                        return update.transition()
+                            .duration(2000)
+                            .attr('x', function (d: any) { return scaleX(median) + width * 0.001 })
+                            .attr('y', -height / 3 + margin * 2, 7)
+                    }
+                }
+            )
     }
-    useEffect(() => {
 
+    useEffect(() => {
         let x1: number[] = array1.map(function (x: any) { return x.value })
         let x2: number[] = array2.map(function (x: any) { return x.value })
         let x3: number[] = array3.map(function (x: any) { return x.value })
@@ -269,11 +291,16 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
 
         circleTwoDoses = svg.append('g')
             .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height / 3 - margin) + ')')
-
         circleOneDose = svg.append('g')
             .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height / 3 * 2 - margin) + ')')
-
         notVaccinated = svg.append('g')
+            .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height - margin) + ')')
+
+        circleTwoDosesLine = svg.append('g')
+            .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height / 3 - margin) + ')')
+        circleOneDoseLine = svg.append('g')
+            .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height / 3 * 2 - margin) + ')')
+        notVaccinatedLine = svg.append('g')
             .attr('transform', 'translate(' + (width * 0.25) + ', ' + (height - margin) + ')')
 
         leftText()
@@ -282,13 +309,13 @@ export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble
         line(0, height, width, height)
         line(width * 0.25, 0, width * 0.25, height)
 
-        graphBubleE(circleTwoDoses, array1, y1, 0)
-        graphBubleE(circleOneDose, array2, y2, 1)
-        graphBubleE(notVaccinated, array3, y3, 2)
+        graphBubble(circleTwoDoses, array1, y1, 0)
+        graphBubble(circleOneDose, array2, y2, 1)
+        graphBubble(notVaccinated, array3, y3, 2)
 
-        medianText(circleTwoDoses, x1, 0)
-        medianText(circleOneDose, x2, 1)
-        medianText(notVaccinated, x3, 2)
+        medianText(circleTwoDosesLine, x1, 0, aa)
+        medianText(circleOneDoseLine, x2, 1, aa)
+        medianText(notVaccinatedLine, x3, 2, aa)
     }, [])
 
     return (<>

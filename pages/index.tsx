@@ -98,8 +98,6 @@ export default function Home() {
 
     }, [a1])
     return (<>
-
-        <button onClick={cambia}>click</button>
         <BubbleColor array1={a1} array2={array2} array3={array3} />
         {/* <Prueba /> */}
 

@@ -35,7 +35,6 @@ export default function Home() {
             country: 'Germany'
         },
     ]
-
     let array2: Bubble[] = [
         {
             value: 0.539275,
@@ -59,7 +58,6 @@ export default function Home() {
             country: 'Germany'
         },
     ]
-
     let array3: Bubble[] = [
         {
             value: 0.639275,
@@ -87,7 +85,6 @@ export default function Home() {
             country: 'France'
         },
     ]
-
     const [a1, setA1] = useState(array1)
 
     function cambia() {
@@ -98,7 +95,7 @@ export default function Home() {
 
     }, [a1])
     return (<>
-        <BubbleColor array1={a1} array2={array2} array3={array3} />
+        <ThreeColorCircle />
         {/* <Prueba /> */}
 
     </>

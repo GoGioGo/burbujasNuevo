@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
-import { findJson } from '../../functions/Functions';
 
 export default function ThreeColorCircle() {
-
-
-
     const a3 = useRef<HTMLInputElement>(null);
     const b3 = useRef<HTMLInputElement>(null);
     const c3 = useRef<HTMLInputElement>(null);
@@ -24,18 +20,17 @@ export default function ThreeColorCircle() {
     let data: cordenate[]
     data = [{ x: 0, y: 0 }]
 
-    let width = 400, height = 400, radius = 7
+    let width = 600, height = width, radius = width * 0.012, margin = radius * 2
 
-    function generate(width: number, radius: number) {
+    function generate() {
         let indice = 0
         let d: cordenate = { x: 1, y: 1 }
         let x2 = 0;
         let y2 = 0;
-        for (let i = -width / 2; i < width / 2; i = i + radius * 3) {
-            for (let j = -width / 2; j < width / 2; j = j + radius * 2.5) {
+        for (let i = -width / 2 + margin; i <= width / 2 - margin; i = i + radius * 2.7) {
+            for (let j = -width / 2 + margin; j <= width / 2 - margin; j = j + radius * 2.7) {
                 x2 = j + (Math.random() * (radius * 0.8 - radius * 0.1) + radius * 0.1)
                 y2 = i + (Math.random() * (radius * 0.8 - radius * 0.1) + radius * 0.1)
-
                 if (verifica(x2, y2)) {
                     data[indice] = { x: x2, y: y2 }
                     indice++
@@ -45,7 +40,7 @@ export default function ThreeColorCircle() {
     }
 
     function verifica(x: number, y: number): boolean {
-        if (200 > Math.sqrt(Math.pow((Math.abs(x)), 2) + Math.pow((Math.abs(y)), 2)))
+        if (width / 2 - margin >= Math.sqrt(Math.pow((Math.abs(x)), 2) + Math.pow((Math.abs(y)), 2)))
             return true
         else
             return false
@@ -78,7 +73,7 @@ export default function ThreeColorCircle() {
                 return d.x
             })
             .attr('cy', function (d: any, i) { return d.y })
-            .attr('r', radius * 0.85)
+            .attr('r', radius)
             .attr('fill', function (d, i) {
                 if (a1 < a) {
                     a1++
@@ -120,13 +115,7 @@ export default function ThreeColorCircle() {
                 .transition()
                 .duration(3000)
                 .attr('r', 0)
-                /* .transition()
-                .duration(3000)
-                .attr('r', radius*0.8)
-                .attr('fill', 'black') */
-
         }
-        
         setTimeout(() => {
             transition()
         }, 3000);
@@ -144,7 +133,7 @@ export default function ThreeColorCircle() {
             svg.filter('#circle' + i)
                 .transition()
                 .duration(3000)
-                .attr('r', radius * 0.85)
+                .attr('r', radius)
                 .attr('fill', function (d, i) {
                     if (a1 < a) {
                         a1++
@@ -181,22 +170,20 @@ export default function ThreeColorCircle() {
     }
 
     useEffect(() => {
-
-        generate(400, radius)
+        console.log(margin)
+        generate()
         graphCircle()
     }, [])
 
     return (<>
-        <div id='div1' style={{ padding: '20px' }}>
+        <div id='div1' >
         </div>
         <div>
             <h2>Porcentajes</h2>
             <input ref={a3} type='number' />
             <input ref={b3} type='number' />
-            <input ref={c3} type='number' />        
-
+            <input ref={c3} type='number' />
             <button onClick={() => execute()}>EnviarPorcentajes</button>
-
         </div>
     </>
     )

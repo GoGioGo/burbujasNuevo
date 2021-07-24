@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { Bubble } from '../../interfaces/Interfaces'
-import { color } from 'd3';
 
 export default function BubbleColor({ array1, array2, array3 }: { array1: Bubble[], array2: Bubble[], array3: Bubble[] }) {
 

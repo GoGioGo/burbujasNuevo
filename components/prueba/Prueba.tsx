@@ -1,104 +1,109 @@
-/* import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import * as d3 from 'd3'
 
 export default function Prueba() {
-    let a = [10, 20, 30]
-    let b = [10, 20, 30, 40]
-    let width = 800, height = 600, margin = 10
-    useEffect(() => {
-        //graph()
-    }, [])
-    function graph() {
-        var svg = d3.select('#gio')
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-        var circle = svg.selectAll('circle')
-            .data(a)
-            .enter()
-            .join(
-                enter => enter
-                    .append('circle')
-                    .attr('cx', function (d) {
-                        return d * 10
-                    })
-                    .attr('cy', function (d, i) {
-                        return i * 10
-                    })
-                    .attr('r', 15)
-                    .attr('stroke', 'black'),
-                update => update.transition()
-                    .duration(2000)
-                    .attr('cx', function (d) { return d })
-                    .attr('cy', function (d, i) { return i * 20 })
-            )
-    }
-    return <div id='gio'>
-            Hola mundo
-    </div>
-}
- */
-
-
-import React, { useEffect } from 'react'
-import * as d3 from 'd3'
-
-export default function Prueba() {
-    let a = [10, 20, 30]
-    let b = [13, 23, 33, 45]
-    let width = 800, height = 300, margin = 10
-
+    let width = 600, height = width, radius = width * 0.03, margin = radius * 2
     let svg: any
-    let circle: any
 
-    function graph(circle: any, array: number[]) {
-
-        circle.selectAll('circle')
-            .data(array)
-            .join(
-                function (enter: any) {
-                    return enter.append('circle')
-                        .attr('cx', function (d: any) {
-                            return d * 10
-                        })
-                        .attr('cy', function (d: any, i: any) {
-                            return i * 10
-                        })
-                        .attr('r', 15)
-                        .attr('stroke', 'black')
-                },
-                function (update: any) {
-                    return update.transition()
-                        .duration(2000)
-                        .attr('cx', function (d: any) {
-                            return d * 10
-                        })
-                        .attr('cy', function (d: any, i: any) {
-                            return i * 10
-                        })
-                })
-
-    }
-    function click() {
-        graph(circle, a)
+    interface coordinate {
+        x: number,
+        y: number
     }
 
-    function text(){
-        
+    let data: coordinate[]
+    data = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 40, y: 40 }]
+
+    const ref = useRef(null)
+
+    function generate() {
+        let indice = 0;
+        let sw = 0, k = 0
+        let x1 = 0, y1 = 0
+        for (let i = 0; i < width * 0.4; i++) {
+            for (let j = 0; j < width * 0.3; j++) {
+                x1 = Math.floor((Math.random() * (1000 + 1000 + 1)) - 1000)
+                y1 = Math.floor((Math.random() * (1000 + 1000 + 1)) - 1000)
+                if (verifica(x1, y1)) {
+                    data[indice] = { x: x1, y: y1 }
+                                indice++
+                    /* k = 0
+                    while (sw == 0 && k <= data.length) {
+                        if (verificaRadius(data[k], { x: x1, y: y1 })) {
+                            k++
+                            if (k == data.length) {
+                                data[indice] = { x: x1, y: y1 }
+                                indice++
+                            }
+                        }
+                        else {
+                            sw = 1
+                        }
+                    } */
+
+                }
+            }
+        }
+        let d = [{ x: 0, y: 0 }]
+        indice = 0
+        let to = data.length
+        for (let i = 0; i < to; i++) {
+            indice = i
+            d[indice] = data[i]
+            for (let j = 0; j < to; j++) {
+                if (verificaRadius(data[i], data[j])) {
+                    indice++
+                    d[indice] = data[j]
+                    to--
+                }
+            }
+            data = d
+        }
+    }
+    function verificaRadius(a: coordinate, b: coordinate): boolean {
+        if (2 * radius < Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2))) {
+            console.log(Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2)))
+            return true
+        }
+        else
+            return false
+    }
+    function verifica(x: number, y: number): boolean {
+        if (width / 2 - margin >= Math.sqrt(Math.pow((Math.abs(x)), 2) + Math.pow((Math.abs(y)), 2)))
+            return true
+        else
+            return false
+    }
+    function print() {
+        svg.selectAll('circle')
+            .data(data)
+            .enter()
+            .append('circle')
+            .attr('id', function (d: any, i: any) {
+                return 'circle' + i
+            })
+            .attr('cx', function (d: any, i: any) {
+                return d.x
+            })
+            .attr('cy', function (d: any, i: any) { return d.y })
+            .attr('r', radius)
+            .attr('fill', 'transparent')
+            .attr('stroke', 'black')
     }
 
     useEffect(() => {
-        svg = d3.select('#gio')
-            .append('svg')
+        console.log(radius)
+        svg = d3.select(ref.current)
             .attr('width', width)
             .attr('height', height)
-        circle = svg.append('g')
-        graph(circle, b)
+            .append('g')
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+        generate()
+        print()
     }, [])
-    return (<>
-        <div id='gio'>
+
+    return (
+        <div>
+            <svg ref={ref} />
         </div>
-        <button onClick={() => click()}>transition</button>
-    </>
     )
 }

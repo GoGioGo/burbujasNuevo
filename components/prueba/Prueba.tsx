@@ -2,35 +2,48 @@ import React, { useRef, useEffect } from 'react'
 import * as d3 from 'd3'
 
 export default function Prueba() {
-    let width = 600, height = width, radius = width * 0.03, margin = radius * 2
+    let width = 400, height = width, radius = width * 0.023, margin = radius * 2
     let svg: any
 
     interface coordinate {
         x: number,
         y: number
     }
+    let a = 40
+    let b = 40
+    let c = 20
 
+    let color = ['#63a0c4', '#a2c3d6', '#edb266']
     let data: coordinate[]
     data = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 40, y: 40 }]
 
     const ref = useRef(null)
+    const a3 = useRef<HTMLInputElement>(null);
+    const b3 = useRef<HTMLInputElement>(null);
+    const c3 = useRef<HTMLInputElement>(null);
+
+    function compare(a: any, b: any) {
+        if (a.y < b.y) {
+            return -1;
+        }
+        if (a.y > b.y) {
+            return 1;
+        }
+        return 0;
+    }
 
     function generate() {
         let indice = 0;
         let sw = 0, k = 0
         let x1 = 0, y1 = 0
-        for (let i = 0; i < width * 0.4; i++) {
-            for (let j = 0; j < width * 0.3; j++) {
-                x1 = Math.floor((Math.random() * (1000 + 1000 + 1)) - 1000)
-                y1 = Math.floor((Math.random() * (1000 + 1000 + 1)) - 1000)
+        for (let i = 0; i < width * 0.15; i++) {
+            for (let j = 0; j < width * 0.15; j++) {
+                x1 = Math.floor((Math.random() * (width / 2 - margin + width / 2 - margin)) - (width / 2 - margin))
+                y1 = Math.floor((Math.random() * (width / 2 - margin + width / 2 - margin)) - (width / 2 - margin))
                 if (verifica(x1, y1)) {
-                    data[indice] = { x: x1, y: y1 }
-                                indice++
-                    /* k = 0
-                    while (sw == 0 && k <= data.length) {
+                    while (sw == 0 && k < data.length) {
                         if (verificaRadius(data[k], { x: x1, y: y1 })) {
-                            k++
-                            if (k == data.length) {
+                            if (k == data.length - 1) {
                                 data[indice] = { x: x1, y: y1 }
                                 indice++
                             }
@@ -38,29 +51,17 @@ export default function Prueba() {
                         else {
                             sw = 1
                         }
-                    } */
-
+                        k++
+                    }
+                    k = 0
+                    sw = 0
                 }
             }
-        }
-        let d = [{ x: 0, y: 0 }]
-        indice = 0
-        let to = data.length
-        for (let i = 0; i < to; i++) {
-            indice = i
-            d[indice] = data[i]
-            for (let j = 0; j < to; j++) {
-                if (verificaRadius(data[i], data[j])) {
-                    indice++
-                    d[indice] = data[j]
-                    to--
-                }
-            }
-            data = d
         }
     }
+
     function verificaRadius(a: coordinate, b: coordinate): boolean {
-        if (2 * radius < Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2))) {
+        if (2.1 * radius < Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2))) {
             console.log(Math.sqrt(Math.pow((a.x - b.x), 2) + Math.pow((a.y - b.y), 2)))
             return true
         }
@@ -73,8 +74,23 @@ export default function Prueba() {
         else
             return false
     }
-    function print() {
-        svg.selectAll('circle')
+
+
+    function graphCircle() {
+        //Porcentajes
+        data = data.sort(compare)
+
+        a = Math.ceil(data.length * a / 100)
+        b = Math.ceil(data.length * b / 100)
+        c = Math.ceil(data.length * c / 100)
+
+        let a1 = 0, b1 = 0, c1 = 0
+        let a2 = 0, b2 = 0, c2 = 0
+
+        svg.append('g')
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+
+        let circle = svg.selectAll('circle')
             .data(data)
             .enter()
             .append('circle')
@@ -86,8 +102,100 @@ export default function Prueba() {
             })
             .attr('cy', function (d: any, i: any) { return d.y })
             .attr('r', radius)
-            .attr('fill', 'transparent')
-            .attr('stroke', 'black')
+            .attr('fill', function (d: any, i: any) {
+                if (a1 < a) {
+                    a1++
+                    return color[0]
+                }
+                else {
+                    if (b1 < b) {
+                        b1++
+                        return color[1]
+                    }
+                    else {
+                        c1++
+                        return color[2]
+                    }
+                }
+            })
+            .attr('stroke', function (d: any, i: any) {
+                if (a2 < a) {
+                    a2++
+                    return color[0]
+                }
+                else {
+                    if (b2 < b) {
+                        b2++
+                        return color[1]
+                    }
+                    else {
+                        c2++
+                        return color[2]
+                    }
+                }
+            })
+    }
+
+    function execute() {
+        let circle = d3.select(ref.current)
+            .selectAll('circle')
+        for (let i = 0; i < data.length; i++) {
+            circle.filter('#circle' + i)
+                .transition()
+                .duration(3000)
+                .attr('r', 0)
+        }
+        setTimeout(() => {
+            transition()
+        }, 3000);
+    }
+    function transition() {
+        a = Math.ceil(data.length * parseInt(a3.current!.value) / 100)
+        b = Math.ceil(data.length * parseInt(b3.current!.value) / 100)
+        c = Math.ceil(data.length * parseInt(c3.current!.value) / 100)
+        let a1 = 0, b1 = 0, c1 = 0
+        let a2 = 0, b2 = 0, c2 = 0
+
+        let circle = d3.select(ref.current)
+            .selectAll('circle')
+        for (let i = 0; i < data.length; i++) {
+            circle.filter('#circle' + i)
+                .transition()
+                .duration(3000)
+                .attr('r', radius)
+                .attr('fill', function (d: any, i: any) {
+                    if (a1 < a) {
+                        a1++
+                        return color[0]
+                    }
+                    else {
+                        if (b1 < b) {
+                            b1++
+                            return color[1]
+                        }
+                        else {
+                            c1++
+                            return color[2]
+                        }
+                    }
+                })
+                .attr('stroke', function (d: any, i: any) {
+                    if (a2 < a) {
+                        a2++
+                        return color[0]
+                    }
+                    else {
+                        if (b2 < b) {
+                            b2++
+                            return color[1]
+                        }
+                        else {
+                            c2++
+                            return color[2]
+                        }
+                    }
+                })
+        }
     }
 
     useEffect(() => {
@@ -98,12 +206,20 @@ export default function Prueba() {
             .append('g')
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
         generate()
-        print()
+        graphCircle()
     }, [])
 
-    return (
+    return (<>
         <div>
             <svg ref={ref} />
         </div>
+        <div>
+            <h2>Porcentajes</h2>
+            <input ref={a3} type='number' />
+            <input ref={b3} type='number' />
+            <input ref={c3} type='number' />
+            <button onClick={() => execute()}>EnviarPorcentajes</button>
+        </div>
+    </>
     )
 }

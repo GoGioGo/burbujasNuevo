@@ -95,8 +95,8 @@ export default function Home() {
 
     }, [a1])
     return (<>
-        <ThreeColorCircle />
-        {/* <Prueba /> */}
+        {/* <ThreeColorCircle /> */}
+        <Prueba />
 
     </>
     )

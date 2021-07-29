@@ -9,7 +9,9 @@ import CircleThree from '../components/circleThreeColor/CircleThree'
 import ThreeColorCircle from '../components/threeColorCircle/ThreeColorCircle'
 import BubbleColor from '../components/bubbleColor/BubbleColor'
 import { Bubble } from '../interfaces/Interfaces'
+import Waffle from '../components/waffle/Waffle'
 import Prueba from '../components/prueba/Prueba'
+
 import { useEffect, useState } from 'react'
 export default function Home() {
     let array1: Bubble[] = [
@@ -97,7 +99,6 @@ export default function Home() {
     return (<>
         {/* <ThreeColorCircle /> */}
         <Prueba />
-
     </>
     )
 }

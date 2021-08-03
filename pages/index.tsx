@@ -11,6 +11,7 @@ import BubbleColor from '../components/bubbleColor/BubbleColor'
 import { Bubble } from '../interfaces/Interfaces'
 import Waffle from '../components/waffle/Waffle'
 import Prueba from '../components/prueba/Prueba'
+import Prueba2 from '../components/prueba2/Prueba2'
 
 import { useEffect, useState } from 'react'
 export default function Home() {
@@ -98,7 +99,7 @@ export default function Home() {
     }, [a1])
     return (<>
         {/* <ThreeColorCircle /> */}
-        <Prueba />
+        <Prueba2 />
     </>
     )
 }
